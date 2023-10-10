@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
@@ -6,7 +7,7 @@ const port = 8000;
 const users = { 
     users_list : [
        { 
-          id : 'xyz789',
+          id : 'xyz',
           name : 'Charlie',
           job: 'Janitor',
        },
@@ -29,7 +30,12 @@ const users = {
           id: 'zap555', 
           name: 'Dennis',
           job: 'Bartender',
-       }
+       },
+       {
+        "id": "qwe123",
+        "job": "Zookeeper",
+        "name": "Cindy"
+        }
     ]
 }
 
@@ -41,6 +47,17 @@ const findUserByName = (name) => {
 const findUserById = (id) =>
     users['users_list']
         .find( (user) => user['id'] === id);
+
+        const addUser = (user) => {
+            users['users_list'].push(user);
+            return user;
+        }
+        
+        app.post('/users', (req, res) => {
+            const userToAdd = req.body;
+            addUser(userToAdd);
+            res.send();
+        });
     
 app.get('/users/:id', (req, res) => {
     const id = req.params['id']; //or req.params.id
@@ -64,6 +81,8 @@ app.get('/users', (req, res) => {
     }
 });
 
+app.use(cors());
+
 app.use(express.json());
 
 app.get('/users', (req, res) => {
@@ -73,3 +92,4 @@ app.get('/users', (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });  
+
